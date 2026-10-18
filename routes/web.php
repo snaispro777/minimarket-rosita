@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CategoriaController;
+use App\Http\Controllers\Admin\ContenidoController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InventarioController;
 use App\Http\Controllers\Admin\OrdenCompraController;
@@ -85,6 +86,15 @@ Route::middleware(['auth', 'admin'])
         Route::get('/inventario', [InventarioController::class, 'index'])->name('inventario.index');
         Route::get('/inventario/{producto}', [InventarioController::class, 'show'])->name('inventario.show');
         Route::post('/inventario/{producto}/ajustar', [InventarioController::class, 'ajustar'])->name('inventario.ajustar');
+
+        // Contenido visual de la tienda pública.
+        Route::get('/contenido', [ContenidoController::class, 'index'])->name('contenido.index');
+        Route::post('/contenido/logo', [ContenidoController::class, 'updateLogo'])->name('contenido.logo.update');
+        Route::post('/contenido/diapositivas', [ContenidoController::class, 'storeSlide'])->name('contenido.diapositivas.store');
+        Route::put('/contenido/diapositivas/{diapositiva}', [ContenidoController::class, 'updateSlide'])
+            ->name('contenido.diapositivas.update');
+        Route::delete('/contenido/diapositivas/{diapositiva}', [ContenidoController::class, 'destroySlide'])
+            ->name('contenido.diapositivas.destroy');
     });
 
 /*

@@ -10,6 +10,7 @@ use App\Models\Categoria;
 use App\Models\Producto;
 use App\Services\InventarioService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 /**
  * Gestión del catálogo (H-14).
@@ -46,7 +47,9 @@ class ProductoController extends Controller
 
     public function store(StoreProductoRequest $request)
     {
-        $producto = Producto::create($request->validated());
+        $datos = $request->validated();
+        $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
+        $producto = Producto::create($datos);
 
         // Un producto puede darse de alta con existencias. Sin esta línea de
         // apertura entraría al catálogo con un kardex que no explica su stock.
@@ -69,7 +72,20 @@ class ProductoController extends Controller
      */
     public function update(UpdateProductoRequest $request, Producto $producto)
     {
-        $producto->update($request->validated());
+        $datos = $request->validated();
+        unset($datos['imagen']);
+
+        if ($request->hasFile('imagen')) {
+            $imagenAnterior = $producto->getRawOriginal('imagen');
+            $datos['imagen'] = $request->file('imagen')->store('productos', 'public');
+            $producto->update($datos);
+
+            if ($imagenAnterior && str_starts_with($imagenAnterior, 'productos/')) {
+                Storage::disk('public')->delete($imagenAnterior);
+            }
+        } else {
+            $producto->update($datos);
+        }
 
         return redirect()->route('admin.productos.index')
             ->with('success', 'Producto actualizado correctamente.');

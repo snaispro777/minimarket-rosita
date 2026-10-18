@@ -12,54 +12,68 @@
 
 @section('contenido')
 
-    <nav class="bg-gray-900 text-gray-200">
-        <div class="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+    <div class="admin-shell">
+        <div class="admin-layout">
+            <aside class="admin-sidebar text-gray-200">
+                <div class="admin-sidebar-inner">
+                    <a href="{{ route('admin.dashboard') }}" class="admin-brand flex items-center gap-3 text-white">
+                        <span class="admin-brand-emblem">
+                            <img src="{{ $logoTienda }}" alt="Rosita Minimarket">
+                        </span>
+                    </a>
 
-            <div class="flex items-center gap-6">
-                <a href="{{ route('admin.dashboard') }}" class="font-bold text-white whitespace-nowrap">
-                    {{ config('app.name') }} <span class="text-gray-400 font-normal">· Panel</span>
-                </a>
+                    <div class="admin-sidebar-rule"></div>
 
-                <div class="hidden md:flex items-center gap-1 text-sm">
+                    <nav class="admin-sidebar-nav text-sm" aria-label="Navegación del panel">
+                    <p class="admin-sidebar-label">Administración</p>
                     @php
                         $enlaces = [
                             ['admin.dashboard', 'Resumen'],
                             ['admin.productos.index', 'Productos'],
                             ['admin.categorias.index', 'Categorías'],
                             ['admin.inventario.index', 'Inventario'],
-                            ['admin.proveedores.index', 'Proveedores'],
-                            ['admin.ordenes.index', 'Órdenes'],
+                            ['admin.contenido.index', 'Contenido'],
                         ];
                     @endphp
 
                     @foreach($enlaces as [$ruta, $texto])
-                        <a href="{{ route($ruta) }}"
-                           class="px-3 py-1.5 rounded {{ request()->routeIs(str_replace('.index', '.*', $ruta)) ? 'bg-gray-700 text-white' : 'hover:bg-gray-800' }}">
-                            {{ $texto }}
-                        </a>
+                            <a href="{{ route($ruta) }}"
+                               class="admin-nav-link {{ request()->routeIs(str_replace('.index', '.*', $ruta)) ? 'is-active' : '' }}">
+                                <span class="admin-nav-mark"></span>
+                                {{ $texto }}
+                            </a>
                     @endforeach
+                    </nav>
+
+                    <div class="admin-sidebar-footer text-sm">
+                        
+                        <a href="{{ route('home') }}" class="admin-sidebar-action">Ver la tienda <span aria-hidden="true">↗</span></a>
+
+                        <form method="POST" action="{{ route('logout') }}">
+                            @csrf
+                            <button class="admin-sidebar-action">Cerrar sesión <span aria-hidden="true">→</span></button>
+                        </form>
+                        <div class="admin-profile">
+                            <span class="admin-avatar" aria-hidden="true">
+                                {{ mb_strtoupper(mb_substr(auth()->user()->name, 0, 1)) }}
+                            </span>
+                            <span class="admin-profile-copy">
+                                <span class="admin-sidebar-user">{{ auth()->user()->name }}</span>
+                                <span class="admin-profile-role">Administrador</span>
+                            </span>
+                        </div>
+                    </div>
+            </div>
+            </aside>
+
+            <main class="admin-content">
+                <div class="admin-main max-w-7xl mx-auto px-4 py-10">
+                    <x-alerta-flash />
+
+                    @yield('content')
                 </div>
-            </div>
-
-            <div class="flex items-center gap-4 text-sm">
-                <a href="{{ route('home') }}" class="text-gray-400 hover:text-white whitespace-nowrap">Ver la tienda</a>
-
-                <span class="text-gray-600">|</span>
-
-                <span class="text-gray-400 hidden sm:inline">{{ auth()->user()->name }}</span>
-
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <button class="hover:text-white whitespace-nowrap">Cerrar sesión</button>
-                </form>
-            </div>
+            </main>
         </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <x-alerta-flash />
-
-        @yield('content')
-    </main>
+    </div>
 
 @endsection

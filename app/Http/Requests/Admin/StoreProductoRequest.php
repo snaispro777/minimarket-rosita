@@ -6,6 +6,7 @@ use App\Enums\UnidadMedida;
 use App\Models\Producto;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 /**
  * Alta de un producto (H-12).
@@ -26,7 +27,7 @@ class StoreProductoRequest extends FormRequest
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['required', 'string'],
             'precio' => ['required', 'numeric', 'min:0'],
-            'imagen' => ['required', 'string'],
+            'imagen' => ['required', File::image()->max('5mb')],
             'categoria_id' => ['required', 'exists:categorias,id'],
             'stock' => ['required', 'integer', 'min:0'],
             'stock_minimo' => ['required', 'integer', 'min:0'],

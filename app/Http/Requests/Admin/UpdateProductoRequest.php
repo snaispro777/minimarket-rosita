@@ -5,6 +5,7 @@ namespace App\Http\Requests\Admin;
 use App\Enums\UnidadMedida;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\File;
 
 /**
  * Edición de un producto (H-12).
@@ -29,7 +30,7 @@ class UpdateProductoRequest extends FormRequest
             'nombre' => ['required', 'string', 'max:255'],
             'descripcion' => ['required', 'string'],
             'precio' => ['required', 'numeric', 'min:0'],
-            'imagen' => ['required', 'string'],
+            'imagen' => ['nullable', File::image()->max('5mb')],
             'categoria_id' => ['required', 'exists:categorias,id'],
             'stock_minimo' => ['required', 'integer', 'min:0'],
             'unidad_medida' => ['required', Rule::enum(UnidadMedida::class)],

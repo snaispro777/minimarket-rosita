@@ -5,12 +5,13 @@
 
     {{-- Los mensajes flash los pinta <x-alerta-flash> desde el layout --}}
 
-    <div class="grid grid-cols-12 gap-6">
+    <div class="store-catalog grid grid-cols-12 gap-6 mt-0">
 
         {{-- ================= MENÚ LATERAL ================= --}}
         <div class="col-span-3">
-            <div class="bg-white shadow rounded p-4">
-                <h2 class="text-lg font-bold mb-3">Categorías</h2>
+            <div class="store-category-panel rounded-2xl p-5">
+                <p class="store-section-kicker mb-2">Explora</p>
+                <h2 class="text-xl font-bold mb-4">Categorías</h2>
 
                 <ul class="space-y-2">
                     <li>
@@ -43,12 +44,15 @@
                 sobre el catálogo público (H-14).
             --}}
             <div class="flex justify-between items-center mb-4">
-                <h1 class="text-2xl font-bold">Productos</h1>
+                <div>
+                    <p class="store-section-kicker mb-1">Catálogo fresco</p>
+                    <h1 class="store-section-title">Productos</h1>
+                </div>
 
                 @auth
                     @if(auth()->user()->esAdmin())
                         <a href="{{ route('admin.productos.index') }}"
-                           class="text-sm text-gray-600 hover:underline">
+                           class="store-section-link">
                             Gestionar el catálogo →
                         </a>
                     @endif
@@ -58,8 +62,8 @@
         
             {{-- TABLA --}}
             <div id="contenedor-productos">
-                <table class="w-full bg-white shadow rounded overflow-hidden">
-                    <thead class="bg-gray-200">
+                <table class="store-catalog-table w-full bg-white rounded-2xl overflow-hidden">
+                    <thead>
                         <tr>
                             <th class="p-3">Imagen</th>
                             <th class="p-3">Nombre</th>
@@ -78,15 +82,15 @@
                             >
 
                                 <td class="p-3">
-                                    <img src="{{ $producto->imagen }}"
-                                         class="w-16 h-16 object-cover rounded">
+                                     <img src="{{ $producto->imagen }}"
+                                         class="store-catalog-image w-16 h-16 object-cover rounded-xl">
                                 </td>
 
                                 <td class="p-3 font-semibold">
                                     {{ $producto->nombre }}
                                 </td>
 
-                                <td class="p-3 text-red-600 font-bold">
+                                <td class="store-catalog-price p-3 font-bold">
                                     S/ {{ number_format($producto->precio, 2) }}
                                 </td>
 
@@ -113,7 +117,7 @@
                                           onclick="event.stopPropagation()">
                                         @csrf
                                         <input type="hidden" name="producto_id" value="{{ $producto->id }}">
-                                        <button class="bg-green-600 text-white px-3 py-1 rounded disabled:bg-gray-300"
+                                        <button class="store-add-button text-white px-3 py-1.5 rounded-lg disabled:cursor-not-allowed"
                                                 @disabled($producto->stock <= 0)>
                                             Agregar
                                         </button>

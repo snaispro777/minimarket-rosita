@@ -13,7 +13,7 @@
                class="text-sm text-blue-600 hover:underline">Ver kardex</a>
         </div>
 
-        <form action="{{ route('admin.productos.update', $producto) }}" method="POST"
+          <form action="{{ route('admin.productos.update', $producto) }}" method="POST" enctype="multipart/form-data"
               class="bg-white rounded-lg shadow p-6">
             @csrf
             @method('PUT')

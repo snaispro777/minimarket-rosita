@@ -8,16 +8,12 @@
         Antes la vista traía su propio <link> y su propio <script src="...">
         apuntando a un CDN (H-17).
     --}}
-    <div class="w-full mb-16">
+    <div class="store-hero">
         <div class="swiper promociones-swiper">
             <div class="swiper-wrapper">
-                @foreach([
-                    'https://formatodigital.net/wp-content/uploads/2019/02/flyers-que-son-1024x683.jpg',
-                    'https://www.shutterstock.com/image-vector/merry-christmas-50-percent-off-260nw-2393670303.jpg',
-                    'https://fantasiasmiguel.com/cdn/shop/collections/promociones_navidenas.jpg?v=1639694906&width=1920',
-                ] as $promocion)
+                @foreach($diapositivas as $diapositiva)
                     <div class="swiper-slide">
-                        <img src="{{ $promocion }}" alt="" class="w-full h-[420px] object-cover">
+                        <img src="{{ $diapositiva->imagen }}" alt="{{ $diapositiva->texto_alt }}" class="w-full h-[420px] object-cover">
                     </div>
                 @endforeach
             </div>
@@ -29,14 +25,20 @@
     </div>
 
     {{-- ================= PRODUCTOS DESTACADOS ================= --}}
-    <div id="productos" class="max-w-7xl mx-auto px-4">
+    <div id="productos" class="store-section">
 
-        <h2 class="text-2xl font-bold mb-6">Productos destacados</h2>
+        <div class="store-section-heading">
+            <div>
+                <p class="store-section-kicker mb-2">Selección Rosita</p>
+                <h2 class="store-section-title">Productos destacados</h2>
+            </div>
+            <a href="{{ route('productos.index') }}" class="store-section-link hidden sm:inline">Ver catálogo →</a>
+        </div>
 
         @if($productos->isEmpty())
             <p class="text-gray-500">No hay productos registrados aún.</p>
         @else
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            <div class="store-products-grid grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
                 @foreach($productos as $producto)
                     <x-producto-card :producto="$producto" />
                 @endforeach

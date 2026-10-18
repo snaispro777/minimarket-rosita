@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Carrito;
 use App\Models\Categoria;
+use App\Models\ConfiguracionSitio;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
@@ -45,6 +46,12 @@ class AppServiceProvider extends ServiceProvider
                 'carritoCount' => $carritoCount,
                 'categorias' => $categorias,
             ]);
+        });
+
+        View::composer(['layouts.navigation', 'layouts.admin'], function ($view) {
+            $configuracion = ConfiguracionSitio::first();
+
+            $view->with('logoTienda', $configuracion?->logo_url ?? asset('rosita.jpg'));
         });
     }
 }

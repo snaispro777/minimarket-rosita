@@ -12,6 +12,12 @@ echo "==> Configurando nginx en el puerto ${PORT}"
 # Una sustitución no justifica una dependencia más en la imagen.
 sed "s|\${PORT}|${PORT}|g" /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf
 
+# Los volúmenes se montan después de construir la imagen y pueden llegar con
+# permisos de root. Laravel necesita escribir en storage y publicar sus
+# archivos subidos mediante el enlace estándar public/storage.
+chown -R www-data:www-data storage bootstrap/cache
+php artisan storage:link --force
+
 # Sin APP_KEY, Laravel no puede descifrar la sesión y responde 500 en cada
 # petición. Es el fallo número uno al estrenar un despliegue, y el mensaje por
 # defecto no dice qué hacer, así que se dice aquí.
@@ -42,12 +48,6 @@ until php artisan migrate --force --no-interaction; do
     intento=$((intento + 1))
     sleep 3
 done
-
-# Solo cuando se pide: si ya hay catálogo de verdad, sembrar encima duplica.
-if [ "${SEED_AL_ARRANCAR}" = "true" ]; then
-    echo "==> Sembrando datos de trabajo (SEED_AL_ARRANCAR=true)"
-    php artisan db:seed --force --no-interaction
-fi
 
 # Cachear en el arranque y no en la construcción: la configuración depende de
 # variables de entorno que solo existen aquí. Cachearla en el build congelaría

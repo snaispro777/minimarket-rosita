@@ -4,9 +4,12 @@
 
 @section('content')
 
-    <h1 class="text-2xl font-bold mb-6">Inventario</h1>
+    <div class="page-heading">
+        <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">Control operativo</p>
+        <h1 class="text-3xl font-bold">Inventario</h1>
+    </div>
 
-    <form method="GET" class="bg-white rounded-lg shadow p-4 mb-6 flex flex-wrap gap-3 items-end">
+    <form method="GET" class="admin-filter bg-white rounded-xl p-5 mb-6 flex flex-wrap gap-3 items-end">
         <div class="flex-1 min-w-48">
             <label class="block text-sm text-gray-600 mb-1">Buscar</label>
             <input type="text" name="buscar" value="{{ request('buscar') }}"
@@ -19,16 +22,16 @@
             <span class="text-sm text-gray-700">Solo bajo mínimo</span>
         </label>
 
-        <button class="bg-gray-800 hover:bg-gray-900 text-white px-4 py-2 rounded">Filtrar</button>
+        <button class="admin-button-filter text-white px-4 py-2 rounded-lg">Filtrar</button>
 
         @if(request()->hasAny(['buscar', 'reponer']))
             <a href="{{ route('admin.inventario.index') }}" class="px-4 py-2 text-gray-600 hover:underline">Limpiar</a>
         @endif
     </form>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="admin-panel bg-white rounded-xl overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-sm">
+            <table class="admin-table w-full text-sm">
                 <thead class="bg-gray-100 text-left">
                     <tr>
                         <th class="px-4 py-3">Producto</th>
@@ -66,7 +69,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-4 py-8 text-center text-gray-500">
+                            <td colspan="5" class="admin-empty px-4 py-10 text-center text-sm">
                                 No hay productos que coincidan.
                             </td>
                         </tr>

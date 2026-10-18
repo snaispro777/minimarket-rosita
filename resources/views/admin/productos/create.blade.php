@@ -8,7 +8,7 @@
 
         <h1 class="text-2xl font-bold mb-6">Nuevo producto</h1>
 
-        <form action="{{ route('admin.productos.store') }}" method="POST"
+          <form action="{{ route('admin.productos.store') }}" method="POST" enctype="multipart/form-data"
               class="bg-white rounded-lg shadow p-6">
             @csrf
 

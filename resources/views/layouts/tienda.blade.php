@@ -12,14 +12,16 @@
 
 @section('contenido')
 
+<div class="store-shell">
     @include('layouts.navigation')
 
-    <main class="py-6">
+    <main class="store-main">
         <div class="max-w-7xl mx-auto px-4">
             <x-alerta-flash />
         </div>
 
         @yield('content')
     </main>
+</div>
 
 @endsection

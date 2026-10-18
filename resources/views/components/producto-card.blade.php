@@ -7,19 +7,19 @@
     dos maquetaciones distintas y dos botones distintos — uno de los cuales no
     funcionaba (H-43).
 --}}
-<div class="bg-white rounded-xl shadow-sm hover:shadow-md transition overflow-hidden group flex flex-col">
+<div class="store-product-card rounded-2xl overflow-hidden group flex flex-col">
 
     <a href="{{ route('productos.show', $producto) }}" class="block">
-        <div class="relative p-4">
+        <div class="store-product-image relative p-4">
             <img src="{{ $producto->imagen }}" alt="{{ $producto->nombre }}"
                  class="w-full h-40 object-contain group-hover:scale-105 transition">
 
             @if($producto->stock <= 0)
-                <span class="absolute top-2 left-2 bg-gray-700 text-white text-xs px-2 py-1 rounded">
+                <span class="absolute top-3 left-3 bg-gray-700 text-white text-xs px-2.5 py-1 rounded-full">
                     Agotado
                 </span>
             @elseif($producto->bajoMinimo())
-                <span class="absolute top-2 left-2 bg-amber-500 text-white text-xs px-2 py-1 rounded">
+                <span class="absolute top-3 left-3 bg-amber-500 text-white text-xs px-2.5 py-1 rounded-full">
                     Últimas unidades
                 </span>
             @endif
@@ -27,7 +27,7 @@
     </a>
 
     <div class="px-4 pb-4 flex flex-col flex-1">
-        <h3 class="text-sm font-semibold text-gray-800 leading-tight line-clamp-2">
+        <h3 class="store-product-name text-sm font-semibold leading-tight line-clamp-2">
             {{ $producto->nombre }}
         </h3>
 
@@ -38,7 +38,7 @@
         </p>
 
         <div class="mt-2 mb-3">
-            <span class="text-lg font-bold text-red-600">
+            <span class="store-product-price text-xl font-bold">
                 S/ {{ number_format($producto->precio, 2) }}
             </span>
         </div>
@@ -50,7 +50,7 @@
             <input type="hidden" name="producto_id" value="{{ $producto->id }}">
 
             <button type="submit" @disabled($producto->stock <= 0)
-                    class="w-full bg-red-600 text-white py-2 rounded-full text-sm font-semibold hover:bg-red-700 transition disabled:bg-gray-300 disabled:cursor-not-allowed">
+                    class="store-add-button w-full text-white py-2.5 rounded-xl text-sm font-semibold transition disabled:cursor-not-allowed">
                 {{ $producto->stock > 0 ? 'Agregar' : 'Sin stock' }}
             </button>
         </form>

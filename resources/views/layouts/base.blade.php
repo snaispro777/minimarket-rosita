@@ -22,6 +22,7 @@
     {{-- Una sola marca, desde la configuración (H-18). Antes convivían
          "PlazaKing", "Tattos Market", "Supermercado" y "Laravel". --}}
     <title>@hasSection('titulo')@yield('titulo') · @endif{{ config('app.name') }}</title>
+    <link rel="icon" href="{{ asset('mini-mercado.png') }}" type="image/png">
 
     {{-- Todo el CSS y el JS salen del bundle de Vite. Ninguna vista referencia
          un CDN: eso era H-17, y además dejaba la aplicación sin estilos en

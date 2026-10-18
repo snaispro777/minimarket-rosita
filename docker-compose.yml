@@ -1,0 +1,46 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      APP_NAME: "Rosita Minimarket"
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_KEY: "${APP_KEY:-base64:9pN8Yh4V7xQ2mK6sT1wZ3aB5cD7eF0gH2jL4nP6rS8u=}"
+      APP_URL: http://localhost:8080
+      LOG_CHANNEL: stderr
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: supermercado
+      DB_USERNAME: supermercado
+      DB_PASSWORD: supermercado_local
+      FILESYSTEM_DISK: public
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - app-storage:/var/www/html/storage/app/public
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: supermercado
+      MYSQL_USER: supermercado
+      MYSQL_PASSWORD: supermercado_local
+      MYSQL_ROOT_PASSWORD: root_local
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot_local --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  db-data:
+  app-storage:

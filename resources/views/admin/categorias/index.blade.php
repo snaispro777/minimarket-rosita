@@ -4,17 +4,20 @@
 
 @section('content')
 
-    <div class="flex items-center justify-between mb-6">
-        <h1 class="text-2xl font-bold">Categorías</h1>
+    <div class="page-heading flex items-center justify-between">
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-1">Organización</p>
+            <h1 class="text-3xl font-bold">Categorías</h1>
+        </div>
 
         <a href="{{ route('admin.categorias.create') }}"
-           class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+           class="admin-button-primary text-white px-4 py-2.5 rounded-lg">
             + Nueva categoría
         </a>
     </div>
 
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <table class="w-full text-sm">
+    <div class="admin-panel bg-white rounded-xl overflow-hidden">
+        <table class="admin-table w-full text-sm">
             <thead class="bg-gray-100 text-left">
                 <tr>
                     <th class="px-4 py-3">Nombre</th>
@@ -63,7 +66,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="3" class="px-4 py-8 text-center text-gray-500">
+                        <td colspan="3" class="admin-empty px-4 py-10 text-center text-sm">
                             No hay categorías todavía.
                         </td>
                     </tr>

@@ -87,9 +87,18 @@
     </div>
 
     <div class="md:col-span-2">
-        <label class="block text-sm font-medium text-gray-700 mb-1">URL de la imagen</label>
-        <input type="text" name="imagen" required
-               value="{{ old('imagen', $p?->imagen) }}"
-               class="w-full border rounded px-3 py-2">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Imagen del producto</label>
+        <input type="file" name="imagen" accept="image/jpeg,image/png,image/webp" @required(!$p)
+               class="w-full border rounded px-3 py-2 bg-white">
+        <p class="text-xs text-gray-500 mt-1">
+            JPG, PNG o WebP. Tamaño máximo: 5 MB.
+            @if($p)
+                Déjalo vacío para conservar la imagen actual.
+            @endif
+        </p>
+        @if($p?->imagen)
+            <img src="{{ $p->imagen }}" alt="Imagen actual de {{ $p->nombre }}"
+                 class="mt-3 h-24 w-24 rounded object-cover bg-gray-100">
+        @endif
     </div>
 </div>
