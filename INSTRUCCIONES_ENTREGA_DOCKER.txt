@@ -1,0 +1,203 @@
+INSTRUCCIONES DE INSTALACION - ROSITA MINIMARKET
+================================================
+
+Estas instrucciones son para usar la aplicacion en Windows con Docker Desktop.
+
+
+1. ARCHIVOS QUE DEBE RECIBIR LA CLIENTA
+---------------------------------------
+
+Entregar la carpeta completa del proyecto o un archivo .zip descomprimido.
+
+No es necesario instalar PHP, Composer, Node.js ni MySQL en Windows.
+Docker se encarga de ejecutar esos servicios dentro de los contenedores.
+
+No entregar el archivo .env local ni contrasenas reales dentro de la carpeta.
+
+
+2. INSTALAR DOCKER DESKTOP
+--------------------------
+
+1. Descargar Docker Desktop desde:
+   https://www.docker.com/products/docker-desktop/
+2. Instalarlo con la configuracion recomendada.
+3. Reiniciar Windows si el instalador lo solicita.
+4. Abrir Docker Desktop y esperar hasta que indique que esta funcionando.
+
+
+3. ABRIR UNA TERMINAL EN LA CARPETA DEL PROYECTO
+------------------------------------------------
+
+En el Explorador de archivos:
+
+1. Abrir la carpeta del proyecto.
+2. Hacer clic en la barra de direcciones.
+3. Escribir powershell y presionar Enter.
+
+La terminal debe mostrar una ruta parecida a:
+
+PS C:\...\minimarket-rosita>
+
+
+4. CONSTRUIR Y ENCENDER LA APLICACION
+-------------------------------------
+
+Ejecutar este comando la primera vez:
+
+docker compose up --build -d
+
+La primera instalacion puede tardar varios minutos porque Docker descarga
+las imagenes y construye la aplicacion.
+
+Para verificar que los contenedores estan activos:
+
+docker compose ps
+
+Deben aparecer los servicios "app" y "db" en estado running o Up.
+
+Al iniciar, Docker ejecuta automaticamente las migraciones y crea solamente
+los dos usuarios iniciales. No se crean productos, categorias, proveedores
+ni inventario de demostracion.
+
+
+5. USUARIOS INICIALES
+---------------------
+
+Administrador
+Correo: admin@supermercado.test
+Contrasena: password
+
+Cliente
+Correo: cliente@supermercado.test
+Contrasena: password
+
+Por seguridad, cambiar estas contrasenas desde la aplicacion antes de usar
+el sistema con datos reales.
+
+
+6. ABRIR LA APLICACION
+----------------------
+
+Abrir en el navegador:
+
+http://localhost:8080
+
+El panel de administracion se encuentra en:
+
+http://localhost:8080/admin
+
+Los productos, categorias, proveedores e inventario deben registrarse desde
+la aplicacion usando el usuario administrador.
+
+
+7. USO NORMAL
+-------------
+
+Para encender la aplicacion despues de cerrar Docker Desktop:
+
+docker compose start
+
+Para detenerla sin borrar la informacion:
+
+docker compose stop
+
+Para consultar los registros si aparece un error:
+
+docker compose logs -f app
+
+Para consultar los registros de la base de datos:
+
+docker compose logs -f db
+
+
+8. ACTUALIZAR LA APLICACION
+----------------------------
+
+1. Detener los contenedores:
+
+   docker compose down
+
+2. Reemplazar los archivos por la nueva version del proyecto.
+
+3. Construir y encender de nuevo:
+
+   docker compose up --build -d
+
+La base de datos se conserva porque esta guardada en un volumen de Docker.
+El arranque ejecuta las migraciones pendientes y verifica que existan los dos
+usuarios iniciales. No carga productos, categorias, proveedores ni inventario.
+
+
+9. IMPORTANTE SOBRE LOS DATOS
+-----------------------------
+
+Los datos de MySQL se guardan en el volumen de Docker llamado "db-data".
+No ejecutar "docker compose down -v" salvo que se quiera borrar
+completamente la base de datos y los archivos almacenados.
+
+Este comando SI BORRA los datos:
+
+docker compose down -v
+
+No usarlo durante el trabajo normal.
+
+
+10. COPIAS DE SEGURIDAD
+-----------------------
+
+Para crear una copia de la base de datos:
+
+docker compose exec db mysqldump -u supermercado -psupermercado_local supermercado > respaldo.sql
+
+Guardar el archivo respaldo.sql en un lugar seguro.
+
+Para restaurar una copia existente:
+
+Get-Content .\respaldo.sql | docker compose exec -T db mysql -u supermercado -psupermercado_local supermercado
+
+
+11. SOLUCION DE PROBLEMAS
+-------------------------
+
+Si Docker Desktop esta cerrado:
+
+- Abrir Docker Desktop.
+- Esperar a que indique que esta funcionando.
+- Ejecutar nuevamente:
+
+  docker compose up --build -d
+
+Si el navegador muestra que no se puede acceder:
+
+- Confirmar que la direccion sea http://localhost:8080.
+- Ejecutar "docker compose ps".
+- Revisar los registros con "docker compose logs -f app".
+
+Si se necesita reiniciar solo la aplicacion sin borrar datos:
+
+docker compose restart app
+
+
+12. COMANDOS RAPIDOS
+--------------------
+
+Encender:
+docker compose up -d
+
+Encender reconstruyendo:
+docker compose up --build -d
+
+Ver estado:
+docker compose ps
+
+Ver registros:
+docker compose logs -f app
+
+Detener:
+docker compose stop
+
+Eliminar contenedores sin borrar datos:
+docker compose down
+
+Eliminar contenedores y datos:
+docker compose down -v

@@ -4,7 +4,7 @@ set -e
 # Arranque del contenedor. Lo que pasa aquí, en este orden:
 #   1. nginx aprende en qué puerto escuchar (lo decide la plataforma)
 #   2. se comprueba que hay APP_KEY, porque sin ella no arranca nada
-#   3. se espera a la base de datos y se migra
+#   3. se espera a la base de datos, se migra y se crean los dos usuarios
 #   4. se cachea la configuración y arrancan los procesos
 
 echo "==> Configurando nginx en el puerto ${PORT}"
@@ -48,6 +48,9 @@ until php artisan migrate --force --no-interaction; do
     intento=$((intento + 1))
     sleep 3
 done
+
+echo "==> Creando usuarios iniciales (admin y cliente)"
+php artisan db:seed --class=UserSeeder --force --no-interaction
 
 # Cachear en el arranque y no en la construcción: la configuración depende de
 # variables de entorno que solo existen aquí. Cachearla en el build congelaría

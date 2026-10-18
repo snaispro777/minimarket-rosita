@@ -31,10 +31,10 @@ class UserSeeder extends Seeder
         foreach ($usuarios as [$nombre, $email, $rol]) {
             $usuario = User::firstOrNew(['email' => $email]);
 
-            $usuario->fill([
-                'name' => $nombre,
-                'password' => 'password',
-            ]);
+            $usuario->name = $nombre;
+            if (! $usuario->exists) {
+                $usuario->password = 'password';
+            }
 
             $usuario->rol = $rol;
             $usuario->email_verified_at = now();
